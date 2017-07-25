@@ -1,10 +1,8 @@
 package game.enemies;
 
 import game.Utils;
-import game.base.FrameCounter;
-import game.base.GameObject;
-import game.base.ImageRenderer;
-import game.base.Vector2D;
+import game.base.*;
+import game.player.Player;
 import sun.swing.BakedArrayList;
 
 import java.util.ArrayList;
@@ -15,28 +13,45 @@ import java.util.Vector;
 /**
  * Created by VALV on 7/20/2017.
  */
-public class BlueEnemy extends GameObject{
+public class BlueEnemy extends GameObject {
     FrameCounter coolDownspawE;
     FrameCounter coolDownCounter;
     boolean spellDissabled;
     boolean enemyDissabled;
     Vector2D velocity;
+    public BoxCollider boxCollider;
+    public static BlueEnemy instance;
 
+    private ImageRenderer imageRenderer1;
+    private ImageRenderer imageRenderer2;
+    private ImageRenderer imageRenderer3;
+    private ImageRenderer imageRenderer4;
+    FrameCounter changePicture;
 
     public BlueEnemy() {
         this.velocity = new Vector2D();
+        instance = this;
         this.coolDownspawE = new FrameCounter(150);
         this.coolDownCounter = new FrameCounter(50);
-        this.renderer = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/0.png"));
-
+        this.imageRenderer1 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/0.png"));
+        this.imageRenderer2 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/1.png"));
+        this.imageRenderer3 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/2.png"));
+        this.imageRenderer4 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/3.png"));
+        this.renderer = imageRenderer3;
+        this.changePicture = new FrameCounter(3);
+        this.boxCollider = new BoxCollider(15, 15);
+        this.childrens.add(boxCollider);
+        enemies.add(this);
     }
 
     public void spawEnemy() {
         if (!enemyDissabled) {
             Random random = new Random();
             float rand = random.nextFloat() * (350 - 20) + 20;
-            position.set(rand,10);
+            position.set(rand, 10);
+//            position.set(192,300);
             GameObject.add(this);
+            enemies.add(this);
             enemyDissabled = true;
         }
     }
@@ -51,11 +66,26 @@ public class BlueEnemy extends GameObject{
         }
     }
 
+    public void changePicture() {
+        if (changePicture.run()) {
+            if (renderer == imageRenderer1) renderer = imageRenderer2;
+            else if (renderer == imageRenderer2) renderer = imageRenderer3;
+            else if (renderer == imageRenderer3) renderer = imageRenderer4;
+            else renderer = imageRenderer1;
+            changePicture.reset();
+        }
+
+    }
+
+
     public void castSpell() {
         if (!spellDissabled) {
+            Vector2D target = Player.instance.position;
+            Vector2D bulletVelocity = target.substract(position).normalize().multiply(3);
 
             BlueEnemySpell blueEnemySpell = new BlueEnemySpell();
-            blueEnemySpell.position.set(this.position.add(0,10));
+            blueEnemySpell.velocity.set(bulletVelocity);
+            blueEnemySpell.position.set(this.position.add(0, 10));
             GameObject.add(blueEnemySpell);
             spellDissabled = true;
         }
@@ -69,17 +99,24 @@ public class BlueEnemy extends GameObject{
                 coolDownCounter.reset();
             }
         }
+
     }
 
-    public void run() {
+    public void run(Vector2D parentPosition) {
+        super.run(parentPosition);
+        move();
         castSpell();
         coolDownSpell();
-        move();
+        if (this.position.x < 0 || this.position.x > 385 || this.position.y > 600 || this.position.y < 10)
+            recycle.add(this);
+        childrens.add(this.boxCollider);
 
+
+//        System.out.println(this.boxCollider + " xxxxxxxxxxxxxxxxxx");
     }
 
     public void move() {
-        this.velocity.set(0,2);
+        this.velocity.set(0, 1);
         this.position.addUp(velocity);
 
     }

@@ -1,10 +1,7 @@
 package game.enemies;
 
 import game.Utils;
-import game.base.FrameCounter;
-import game.base.GameObject;
-import game.base.ImageRenderer;
-import game.base.Vector2D;
+import game.base.*;
 
 import java.util.Random;
 
@@ -13,13 +10,22 @@ import java.util.Random;
  */
 public class PinkEnemy extends GameObject {
     FrameCounter coolDownCounter;
-//    FrameCounter coolDownSpawn;
     FrameCounter coolDownspell;
     boolean stopCastSpell;
     Vector2D velocity;
+
+    ImageRenderer imageRenderer1;
+    ImageRenderer imageRenderer2;
+    ImageRenderer imageRenderer3;
+    ImageRenderer imageRenderer4;
+    FrameCounter changePicture;
+    BoxCollider boxCollider;
+
+    public static PinkEnemy instance;
+
     int i = 5;
 
-    boolean move1 = true,move2,move3;
+    boolean move1 = true, move2, move3;
 
     boolean spellDissabled;
     boolean enemyDissabled;
@@ -27,46 +33,69 @@ public class PinkEnemy extends GameObject {
     public PinkEnemy() {
         this.velocity = new Vector2D();
         this.coolDownCounter = new FrameCounter(50);
+        this.coolDownspell = new FrameCounter(4);
+        this.imageRenderer1 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/pink/0.png"));
+        this.imageRenderer2 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/pink/1.png"));
+        this.imageRenderer3 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/pink/2.png"));
+        this.imageRenderer4 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/pink/3.png"));
+        this.changePicture = new FrameCounter(2);
+        this.boxCollider = new BoxCollider(16, 16);
+        childrens.add(boxCollider);
+        instance = this;
 
-        this.coolDownspell = new FrameCounter(5);
-        this.renderer = new ImageRenderer(Utils.loadAssetImage("enemies/level0/pink/1.png"));
     }
 
     public void spawnEnemy() {
         if (!enemyDissabled) {
             PinkEnemy pinkEnemy = new PinkEnemy();
-            pinkEnemy.position.set(96,10);
+            pinkEnemy.position.set(96, 10);
             GameObject.add(pinkEnemy);
-            GameObject.add(pinkEnemy);
+            enemies.add(pinkEnemy);
+
             enemyDissabled = true;
+        }
+    }
+
+    public void changePicture() {
+        if (changePicture.run()) {
+            if (this.renderer == imageRenderer1) this.renderer = imageRenderer2;
+            else if (this.renderer == imageRenderer2) this.renderer = imageRenderer3;
+            else if (this.renderer == imageRenderer3) this.renderer = imageRenderer4;
+            else this.renderer = imageRenderer1;
+            changePicture.reset();
         }
     }
 
     public void spawnEnemy2() {
 
         if (!enemyDissabled) {
-
             PinkEnemy pinkEnemy = new PinkEnemy();
-            pinkEnemy.position.set(288,10);
+            pinkEnemy.position.set(288, 10);
             GameObject.add(pinkEnemy);
-            GameObject.add(pinkEnemy);
+            enemies.add(pinkEnemy);
             enemyDissabled = true;
+
         }
     }
 
+    int count = 3;
 
     public void castSpell() {
         if (!spellDissabled) {
-
-            for (int j = 20; j<160; j+=10) {
-                PinkEnemySpell pinkEnemySpell = new PinkEnemySpell();
-                pinkEnemySpell.nextPosition = new Vector2D((float)(3 * Math.cos(Math.PI * j/180)),(float)( 3 * Math.sin(j * Math.PI/180 )));
-                pinkEnemySpell.position.set(this.position);
-                GameObject.add(pinkEnemySpell);
-                coolDownspell = new FrameCounter(200);
+            if (count > 0) {
+                for (int j = 20; j < 160; j += 20) {
+                    PinkEnemySpell pinkEnemySpell = new PinkEnemySpell();
+                    pinkEnemySpell.nextPosition = new Vector2D((float) (10 * Math.cos(Math.PI * j / 180)), (float) (10 * Math.sin(j * Math.PI / 180)));
+                    pinkEnemySpell.position.set(this.position);
+                    GameObject.add(pinkEnemySpell);
+                    coolDownspell = new FrameCounter(8);
+                }
+                count--;
+            } else {
+                coolDownspell = new FrameCounter(250);
+                count = 3;
             }
             spellDissabled = true;
-
         }
     }
 
@@ -74,32 +103,33 @@ public class PinkEnemy extends GameObject {
         if (spellDissabled && !stopCastSpell) {
             boolean status = coolDownspell.run();
 
-            if (status ) {
+            if (status) {
                 spellDissabled = false;
                 coolDownspell.reset();
             }
         }
     }
 
-
-    public void run() {
+    public void run(Vector2D parentPosition) {
+        super.run(parentPosition);
         castSpell();
         coolDownSpell();
-
         move();
+        if (this.position.x < 0 || this.position.x > 385 || this.position.y > 600 || this.position.y < 10)
+            recycle.add(this);
+//        System.out.println(this.boxCollider);
     }
 
     public void move() {
         if (move1) {
-            this.position.addUp(0, (float)0.5);
+            this.position.addUp(0, (float) 0.5);
         }
         if (move2) {
-            this.position.addUp((float) -0.5,(float)0.5);
+            this.position.addUp((float) -1, (float) 1);
         }
         if (move3) {
-            this.position.addUp((float)0.5,(float) 0.5);
+            this.position.addUp((float) 1, (float) 1);
         }
-
 
         if (this.position.x < 192 && this.position.y > 200) {
             move2 = true;
@@ -112,7 +142,6 @@ public class PinkEnemy extends GameObject {
             move1 = false;
             move2 = false;
         }
-
 
     }
 }
