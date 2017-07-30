@@ -1,12 +1,18 @@
 package game.enemies;
 
 import game.Utils;
-import game.base.*;
+
+import game.bases.*;
+import game.bases.physics.PhysicsBody;
+import game.bases.renderers.ImageRenderer;
+import game.screnes.Settings;
+import javafx.scene.media.MediaPlayer;
+import tklibs.AudioUtils;
 
 /**
  * Created by VALV on 7/22/2017.
  */
-public class BossEnemy extends GameObject {
+public class BossEnemy extends GameObject implements PhysicsBody {
     private FrameCounter coolDownSpel;
     private boolean spellDissabled;
     private Vector2D velocity;
@@ -22,7 +28,7 @@ public class BossEnemy extends GameObject {
     ImageRenderer imageRenderer3;
     FrameCounter changePicture;
     BoxCollider boxCollider;
-
+    public int HP;
 
     public BossEnemy() {
         this.coolDownSpel = new FrameCounter(2);
@@ -33,16 +39,16 @@ public class BossEnemy extends GameObject {
         this.velocity = new Vector2D();
         this.changePicture = new FrameCounter(5);
         instance = this;
-        this.boxCollider = new BoxCollider(30, 40);
-        this.childrens.add(boxCollider);
+        this.boxCollider = new BoxCollider(40, 40);
+        this.children.add(boxCollider);
 
+        this.HP = 2000;
     }
 
     public void spawnEnemyBoss() {
         BossEnemy enemyBoss = new BossEnemy();
         enemyBoss.position.set(192, 10);
         GameObject.add(enemyBoss);
-        enemies.add(enemyBoss);
 
     }
 
@@ -50,8 +56,12 @@ public class BossEnemy extends GameObject {
         super.run(parentPosition);
         move();
         castSpell();
-        if (this.position.x < 0 || this.position.x > 385 || this.position.y > 600 || this.position.y < 10)
-            recycle.add(this);
+        if (this.position.x < 0 || this.position.x > Settings.gameplaywidth - 2 || this.position.y > Settings.gameplayheight || this.position.y < 10)
+            this.isActive = false;
+        if (HP <= 0) {
+            MediaPlayer mediaPlayer = AudioUtils.playMedia("assets/music/sfx/enemy-explosion-big.wav");
+            mediaPlayer.setAutoPlay(true);
+        }
     }
 
     public void changePicture() {
@@ -66,22 +76,22 @@ public class BossEnemy extends GameObject {
     public void castSpell() {
         if (!spellDissabled) {
             if (tmp) {
-                BossEnemySpell2 bossEnemySpell = new BossEnemySpell2();
+                BossEnemySpell2 bossEnemySpell = GameObjectPool.recycle(BossEnemySpell2.class);
                 bossEnemySpell.nexposition = new Vector2D((float) (5 * Math.cos(Math.PI * i / 18)), (float) (5 * Math.sin(Math.PI * i / 18)));
                 bossEnemySpell.position.set(this.position);
-                GameObject.add(bossEnemySpell);
+
                 i++;
 
-                BossEnemySpell2 bossEnemySpell1 = new BossEnemySpell2();
+                BossEnemySpell2 bossEnemySpell1 = GameObjectPool.recycle(BossEnemySpell2.class);
                 bossEnemySpell1.nexposition = new Vector2D((float) (5 * Math.cos(Math.PI * j / 18)), (float) (5 * Math.sin(Math.PI * j / 18)));
                 bossEnemySpell1.position.set(this.position);
-                GameObject.add(bossEnemySpell1);
+
                 j++;
 
-                BossEnemySpell2 bossEnemySpell2 = new BossEnemySpell2();
+                BossEnemySpell2 bossEnemySpell2 = GameObjectPool.recycle(BossEnemySpell2.class);
                 bossEnemySpell2.nexposition = new Vector2D((float) (5 * Math.cos(Math.PI * k / 18)), (float) (5 * Math.sin(Math.PI * k / 18)));
                 bossEnemySpell2.position.set(this.position);
-                GameObject.add(bossEnemySpell2);
+
                 k++;
 
 
@@ -95,10 +105,9 @@ public class BossEnemy extends GameObject {
             } else {
                 if (count > 0) {
                     for (int j = 0; j < 360; j += 10) {
-                        BossEnemySpell bossEnemySpell = new BossEnemySpell();
+                        BossEnemySpell bossEnemySpell = GameObjectPool.recycle(BossEnemySpell.class);
                         bossEnemySpell.nexposition = new Vector2D((float) (5 * Math.cos(Math.PI * j / 180)), (float) (5 * Math.sin(Math.PI * j / 180)));
                         bossEnemySpell.position.set(this.position);
-                        GameObject.add(bossEnemySpell);
                         coolDownSpel = new FrameCounter(4);
                     }
 
@@ -159,5 +168,9 @@ public class BossEnemy extends GameObject {
     }
 
 
+    @Override
+    public BoxCollider getBoxCollider() {
+        return boxCollider;
+    }
 }
 

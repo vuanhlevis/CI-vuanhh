@@ -1,16 +1,22 @@
 package game;
 
-import game.base.BoxCollider;
-import game.base.Contraints;
-import game.base.GameObject;
-import game.base.Vector2D;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import game.bases.Contraints;
+import game.bases.GameObject;
+import game.bases.GameObjectPool;
+import game.bases.physics.Physics;
 import game.enemies.BlueEnemy;
 import game.enemies.BossEnemy;
-import game.enemies.PinkEnemy;
-import game.imputs.InputManager;
-import game.player.Player;
-import game.screens.BackGround;
 
+import game.enemies.PinkEnemy;
+import game.inputs.InputManager;
+import game.player.Player;
+import game.player.PlayerSpell;
+import game.screnes.BackGround;
+import javafx.scene.media.MediaPlayer;
+import tklibs.AudioUtils;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,50 +24,60 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import static sun.misc.PostVMInitHook.run;
+
 /**
- * Created by VALV on 7/20/2017.
+ * Created by VALV on 7/9/2017.
  */
 public class GameWindow extends JFrame {
-    BackGround backGround = new BackGround();
-    private BufferedImage backBufferImage;
-    private Graphics2D backBufferGraphics2D;
-    InputManager inputManager = new InputManager();
+
+    BackGround backGroud = new BackGround();
     boolean status = true;
+
+    private BufferedImage backBufferImage;
+
+    private Graphics2D backBufferGraphic2D;
+
+    InputManager inputManager = new InputManager();
 
     public GameWindow() {
 
-        setupWindow();
+        setUpWindow();
         addBackground();
         addPlayer();
 
+
         backBufferImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        backBufferGraphics2D = (Graphics2D) backBufferImage.getGraphics();
+        backBufferGraphic2D = (Graphics2D) backBufferImage.getGraphics();
+
         setupInput();
-        setVisible(true);
+        this.setVisible(true);
     }
 
     private void addBackground() {
-        backGround = new BackGround();
-        backGround.position.y = this.getHeight();
-        GameObject.add(backGround);
+        backGroud = new BackGround();
+        backGroud.screenPosition.y = this.getHeight();
+        GameObject.add(backGroud);
     }
 
-    private void addEnemies() {
-        BlueEnemy enemy = new BlueEnemy();
-        enemy.spawEnemy();
-        enemy.coolDownspawn();
-        GameObject.add(enemy);
 
+    private void addPlayer() {
+        Player player = new Player();
+        player.setContraints(new Contraints(20, this.getHeight(), 0, backGroud.getWidth()));
+        player.position.set(backGroud.getWidth() / 2, this.getHeight() - 50);
+        player.setInputManager(inputManager);
+
+        GameObject.add(player);
     }
-
 
     private void setupInput() {
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -74,40 +90,83 @@ public class GameWindow extends JFrame {
                 inputManager.keyRelease(e);
             }
         });
-    }
-
-    private void addPlayer() {
-
-        Player player = new Player();
-        player.setContraints(new Contraints(20, this.getHeight(), 0, backGround.renderer.getWidth()));
-        player.position.set(backGround.renderer.getWidth() / 2, this.getHeight() - 50);
-        player.setInputManager(inputManager);
-        GameObject.add(player);
 
     }
 
-    long lasUpdateTime;
+    long lastUpdateTime;
 
     public void loop() {
+
+        AudioUtils.initialize();
+        MediaPlayer mediaPlayer = AudioUtils.playMedia("assets/music/1.mp3");
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.play();
+
+
         while (true) {
-            long currenTime = System.currentTimeMillis();
-            if (currenTime - lasUpdateTime > 17) {
-                lasUpdateTime = currenTime;
+
+
+            long currentTime = System.currentTimeMillis();
+
+            if (currentTime - lastUpdateTime > 17) {
+                lastUpdateTime = currentTime;
                 render();
                 run();
-
             }
+
+//            if (inputManager.enterPress) {
+//                GameObject.clearAll();
+//                GameObjectPool.clearAll();
+//                Physics.clearAll();
+//            }
         }
+
+
+
     }
 
+
+    public void Init() {
+        BossEnemy.instance = null;
+        Player.instance = null;
+        addBackground();
+        addPlayer();
+
+
+
+        this.setVisible(true);
+
+        setUpWindow();
+        addBackground();
+        addPlayer();
+
+
+
+        backBufferImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        backBufferGraphic2D = (Graphics2D) backBufferImage.getGraphics();
+
+        setupInput();
+    }
+
+    private void addEnemies () {
+        BlueEnemy enemy = new BlueEnemy();
+        enemy.spawEnemy();
+        enemy.coolDownspawn();
+        GameObject.add(enemy);
+
+    }
+
+
     private void run() {
-        if (Math.abs(backGround.position.y) < 1111 && Math.abs(backGround.position.y) % 16 == 0) addEnemies();
-        if (Math.abs(backGround.position.y) > 1115 && Math.abs(backGround.position.y) < 2300 && Math.abs(backGround.position.y) % 111 == 0)
+        if (Math.abs(backGroud.screenPosition.y) < 1111 && Math.abs(backGroud.screenPosition.y) % 16 == 0) addEnemies();
+        if (Math.abs(backGroud.screenPosition.y) > 1115 && Math.abs(backGroud.screenPosition.y) < 2300 && Math.abs(backGroud.screenPosition.y) % 111 == 0)
             addPinkEnemies();
-        if (Math.abs(backGround.position.y) > 2500 && status) {
+        if (Math.abs(backGroud.screenPosition.y) > 2500 && status) {
             addBossEnemy();
             status = false;
         }
+
         GameObject.runAll();
         GameObject.changeAllPicture();
     }
@@ -116,7 +175,6 @@ public class GameWindow extends JFrame {
         BossEnemy enemyBoss = new BossEnemy();
         enemyBoss.spawnEnemyBoss();
         GameObject.add(enemyBoss);
-
     }
 
     private void addPinkEnemies() {
@@ -130,26 +188,27 @@ public class GameWindow extends JFrame {
     }
 
     private void render() {
-        backBufferGraphics2D.setColor(Color.BLACK);
-        backBufferGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
-//        backBufferGraphics2D.drawImage(background, 0, backgroundY, null);
-        GameObject.renderAll(backBufferGraphics2D);
+        backBufferGraphic2D.setColor(Color.BLACK);
+        backBufferGraphic2D.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+        GameObject.renderAll(backBufferGraphic2D);
 
         Graphics2D g2d = (Graphics2D) this.getGraphics();
         g2d.drawImage(backBufferImage, 0, 0, null);
     }
 
-
-    private void setupWindow() {
+    private void setUpWindow() {
         this.setSize(800, 600);
+
         this.setResizable(false);
-        this.setTitle("Toughou - remade by Vũ Cơ");
+        this.setTitle("Touhou - remade by Vũ Cơ");
+
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
-                super.windowClosing(e);
             }
         });
     }
+
 }
