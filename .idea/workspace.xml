@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2701edb7-6b3d-461d-a128-a4bebab19870" name="Default" comment="thêm Enemy + spell">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/game/player/Items.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/game/player/PlayerExplove.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/game/player/Sphere.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/game/player/SphereBullet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BlueEnemy.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BlueEnemy.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BlueEnemySpell.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BlueEnemySpell.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemy.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemy.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemySpell.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemySpell.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemySpell2.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/BossEnemySpell2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/PinkEnemy.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/PinkEnemy.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/PinkEnemySpell.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/enemies/PinkEnemySpell.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/player/Player.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/player/Player.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/player/PlayerSpell.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/player/PlayerSpell.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ci-begin/game/screnes/Settings.class" afterPath="$PROJECT_DIR$/out/production/ci-begin/game/screnes/Settings.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/GameWindow.java" afterPath="$PROJECT_DIR$/src/game/GameWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/bases/GameObject.java" afterPath="$PROJECT_DIR$/src/game/bases/GameObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/bases/GameObjectPool.java" afterPath="$PROJECT_DIR$/src/game/bases/GameObjectPool.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/bases/physics/Physics.java" afterPath="$PROJECT_DIR$/src/game/bases/physics/Physics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/BlueEnemy.java" afterPath="$PROJECT_DIR$/src/game/enemies/BlueEnemy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/BlueEnemySpell.java" afterPath="$PROJECT_DIR$/src/game/enemies/BlueEnemySpell.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/BossEnemy.java" afterPath="$PROJECT_DIR$/src/game/enemies/BossEnemy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/BossEnemySpell.java" afterPath="$PROJECT_DIR$/src/game/enemies/BossEnemySpell.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/BossEnemySpell2.java" afterPath="$PROJECT_DIR$/src/game/enemies/BossEnemySpell2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/PinkEnemy.java" afterPath="$PROJECT_DIR$/src/game/enemies/PinkEnemy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/enemies/PinkEnemySpell.java" afterPath="$PROJECT_DIR$/src/game/enemies/PinkEnemySpell.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/inputs/InputManager.java" afterPath="$PROJECT_DIR$/src/game/inputs/InputManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/player/Player.java" afterPath="$PROJECT_DIR$/src/game/player/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/player/PlayerSpell.java" afterPath="$PROJECT_DIR$/src/game/player/PlayerSpell.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/screnes/BackGround.java" afterPath="$PROJECT_DIR$/src/game/screnes/BackGround.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/screnes/Settings.java" afterPath="$PROJECT_DIR$/src/game/screnes/Settings.java" />
-    </list>
+    <list default="true" id="2701edb7-6b3d-461d-a128-a4bebab19870" name="Default" comment="thêm Enemy + spell" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -573,7 +541,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/CI-vuanhh/homework" />
+    <property name="last_opened_file_path" value="D:/CI-vuanhh/homework" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -940,7 +908,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1370" height="744" extended-state="1" />
+    <frame x="-8" y="-8" width="1370" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
