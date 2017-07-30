@@ -45,7 +45,7 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
         if (this.position.y < 0) {
             this.isActive = false;
         }
-        System.out.println(damage);
+
     }
 
     public void changePicture() {
