@@ -88,9 +88,10 @@ public class PinkEnemy extends GameObject implements PhysicsBody {
             if (count > 0) {
                 for (int j = 20; j < 160; j += 20) {
                     PinkEnemySpell pinkEnemySpell = GameObjectPool.recycle(PinkEnemySpell.class);
+//                    PinkEnemySpell pinkEnemySpell = new PinkEnemySpell();
                     pinkEnemySpell.nextPosition = new Vector2D((float) (10 * Math.cos(Math.PI * j / 180)), (float) (10 * Math.sin(j * Math.PI / 180)));
                     pinkEnemySpell.position.set(this.position);
-
+//                    GameObject.add(pinkEnemySpell);
                     coolDownspell = new FrameCounter(8);
                 }
                 count--;

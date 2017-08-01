@@ -71,6 +71,13 @@ public class Sphere extends GameObject {
         }
 
 
+
+//        if ( coolDownSpell.run()  ) {
+//            SphereBullet sphereBullet = GameObjectPool.recycle(SphereBullet.class);
+//            sphereBullet.screenPosition.set(this.screenPosition);
+//
+//            coolDownSpell.reset();
+//        }
     }
 
     @Override

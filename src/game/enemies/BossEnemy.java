@@ -28,6 +28,7 @@ public class BossEnemy extends GameObject implements PhysicsBody {
     ImageRenderer imageRenderer3;
     FrameCounter changePicture;
     BoxCollider boxCollider;
+    boolean stopMove = false;
     public int HP;
 
     public BossEnemy() {
@@ -41,7 +42,6 @@ public class BossEnemy extends GameObject implements PhysicsBody {
         instance = this;
         this.boxCollider = new BoxCollider(40, 40);
         this.children.add(boxCollider);
-
         this.HP = 2000;
     }
 
@@ -122,7 +122,6 @@ public class BossEnemy extends GameObject implements PhysicsBody {
             }
 
             spellDissabled = true;
-//            stopSpell --;
         } else {
             boolean status = coolDownSpel.run();
             if (status) {
@@ -142,12 +141,14 @@ public class BossEnemy extends GameObject implements PhysicsBody {
             down = false;
             right = false;
             status = false;
+
         }
 
-        if (this.position.x >= 350) {
+        if (this.position.x >= 350 ) {
             left = true;
             right = false;
             down = false;
+
         }
         if (this.position.x <= 30) {
             left = false;
@@ -164,7 +165,7 @@ public class BossEnemy extends GameObject implements PhysicsBody {
         if (down) {
             this.position.addUp(0, 2);
         }
-        stopmove.reset();
+
     }
 
 

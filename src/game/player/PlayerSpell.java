@@ -45,7 +45,6 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
         if (this.position.y < 0) {
             this.isActive = false;
         }
-
     }
 
     public void changePicture() {
@@ -80,6 +79,7 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
             bossEnemy.HP -= damage;
             this.isActive = false;
             if (bossEnemy.HP <= 0) {
+                bossEnemy.HP = 0;
                 AudioUtils.playMedia("assets/music/sfx/enemy-explosion.wav");
                 PlayerSpellExplove playerSpellExplove = GameObjectPool.recycle(PlayerSpellExplove.class);
                 playerSpellExplove.isActive = true;

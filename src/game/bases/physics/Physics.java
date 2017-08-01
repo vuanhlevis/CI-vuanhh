@@ -25,6 +25,15 @@ public class Physics {
         }
         return null;
     }
+
+    public static <T extends PhysicsBody> T findEnemy(Class<T> classz) {
+        for (PhysicsBody body : bodies) {
+            if (body.isActive() && body.getClass() == classz) {
+                return (T) body;
+            }
+        }
+        return null;
+    }
     public static void clearAll() {
         bodies.clear();
     }

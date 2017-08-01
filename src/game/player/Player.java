@@ -19,6 +19,7 @@ public class Player extends GameObject implements PhysicsBody {
     Sphere sphereRight;
     Contraints contraints;
     InputManager inputManager;
+    PlayerAnimator playerAnimator;
 
     FrameCounter coolDownCounter;
     boolean spellDisabled;
@@ -31,10 +32,11 @@ public class Player extends GameObject implements PhysicsBody {
     public Player() {
         super();
         this.boxCollider = new BoxCollider(5, 5);
-        this.HP = 100;
+        this.HP = 10;
         this.velocity = new Vector2D();
         this.coolDownCounter = new FrameCounter(5);  // 17 frame  = 300 millisecond
-        this.renderer = new ImageRenderer(Utils.loadAssetImage("players/straight/0.png"));
+        playerAnimator = new PlayerAnimator();
+        this.renderer = playerAnimator;
         instance = this;
         children.add(boxCollider);
 
@@ -59,8 +61,13 @@ public class Player extends GameObject implements PhysicsBody {
         sphereLeft.shoot();
         sphereRight.shoot();
         castSpell();
+        animate();
 
 //        System.out.println(this.sphereLeft.screenPosition);
+    }
+
+    private void animate() {
+        playerAnimator.run(this);
     }
 
     private void castSpell() {
@@ -77,13 +84,12 @@ public class Player extends GameObject implements PhysicsBody {
 
     private void move() {
         this.velocity.set(0, 0);
-        if (inputManager.leftPress) this.velocity.x -= 10;
-        if (inputManager.rightPress) this.velocity.x += 10;
-        if (inputManager.upress) this.velocity.y -= 10;
-        if (inputManager.downPress) this.velocity.y += 10;
+        if (inputManager.leftPress) this.velocity.x -= 6;
+        if (inputManager.rightPress) this.velocity.x += 6;
+        if (inputManager.upress) this.velocity.y -= 6;
+        if (inputManager.downPress) this.velocity.y += 6;
 
         this.position.addUp(velocity);
-
         this.contraints.make(this.position);
 
     }

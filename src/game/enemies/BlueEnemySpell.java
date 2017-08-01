@@ -34,7 +34,7 @@ public class BlueEnemySpell extends GameObject implements PhysicsBody {
         super.run(parentPosition);
         velocityPosition = Player.instance.position;
         if (Math.sqrt(velocityPosition.substract(this.position).x * velocityPosition.substract(this.position).x +
-                velocityPosition.substract(this.position).y * velocityPosition.substract(this.position).y) < 100) {
+                velocityPosition.substract(this.position).y * velocityPosition.substract(this.position).y) < 100 && Player.instance.isActive) {
             velocity = velocityPosition.substract(this.position).normalize().multiply(3);
         }
         this.position.addUp(velocity);

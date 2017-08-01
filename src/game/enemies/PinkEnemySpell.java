@@ -47,7 +47,6 @@ public class PinkEnemySpell extends GameObject implements PhysicsBody {
             this.status = true;
         }
 
-
         hitPlayer();
     }
 

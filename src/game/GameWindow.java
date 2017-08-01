@@ -13,6 +13,7 @@ import game.inputs.InputManager;
 import game.player.Player;
 import game.player.PlayerSpell;
 import game.screnes.BackGround;
+import game.screnes.Settings;
 import javafx.scene.media.MediaPlayer;
 import tklibs.AudioUtils;
 
@@ -37,7 +38,7 @@ public class GameWindow extends JFrame {
 
     BackGround backGroud = new BackGround();
     boolean status = true;
-
+    private MediaPlayer mediaPlayer;
     private BufferedImage backBufferImage;
 
     private Graphics2D backBufferGraphic2D;
@@ -49,13 +50,23 @@ public class GameWindow extends JFrame {
         setUpWindow();
         addBackground();
         addPlayer();
-
+        addAudio();
 
         backBufferImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
         backBufferGraphic2D = (Graphics2D) backBufferImage.getGraphics();
 
         setupInput();
         this.setVisible(true);
+    }
+
+    private void addAudio() {
+        AudioUtils.initialize();
+        mediaPlayer = AudioUtils.playMedia("assets/music/1.mp3");
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setOnRepeat(this::loop);
+        mediaPlayer.setOnPlaying(this::run);
+
     }
 
     private void addBackground() {
@@ -97,12 +108,6 @@ public class GameWindow extends JFrame {
 
     public void loop() {
 
-        AudioUtils.initialize();
-        MediaPlayer mediaPlayer = AudioUtils.playMedia("assets/music/1.mp3");
-        mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setVolume(0.5);
-        mediaPlayer.play();
-
 
         while (true) {
 
@@ -123,7 +128,6 @@ public class GameWindow extends JFrame {
         }
 
 
-
     }
 
 
@@ -134,13 +138,11 @@ public class GameWindow extends JFrame {
         addPlayer();
 
 
-
         this.setVisible(true);
 
         setUpWindow();
         addBackground();
         addPlayer();
-
 
 
         backBufferImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -149,7 +151,7 @@ public class GameWindow extends JFrame {
         setupInput();
     }
 
-    private void addEnemies () {
+    private void addEnemies() {
         BlueEnemy enemy = new BlueEnemy();
         enemy.spawEnemy();
         enemy.coolDownspawn();
@@ -190,8 +192,69 @@ public class GameWindow extends JFrame {
     private void render() {
         backBufferGraphic2D.setColor(Color.BLACK);
         backBufferGraphic2D.fillRect(0, 0, this.getWidth(), this.getHeight());
-
         GameObject.renderAll(backBufferGraphic2D);
+        backBufferGraphic2D.setColor(Color.GREEN);
+
+        if (backGroud.screenPosition.y > 2600) {
+            backBufferGraphic2D.drawString("Boss", 400, 50);
+            backBufferGraphic2D.drawString("BOSS HP:       " + BossEnemy.instance.HP, 400, 100);
+            backBufferGraphic2D.drawString("PLAYER HP:     " + Player.instance.HP, 400, 150);
+            if (BossEnemy.instance.HP <= 0) {
+                backBufferGraphic2D.drawString("----- YOU WIN -----", Settings.gameplaywidth / 2, Settings.gameplayheight / 2);
+                backBufferGraphic2D.setColor(Color.CYAN);
+                backBufferGraphic2D.drawString("Press Enter to exit",Settings.gameplaywidth / 2, Settings.gameplayheight / 2 - 50);
+                this.addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_ENTER:
+                                System.exit(0);
+                        }
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+
+                    }
+                });
+
+            }
+
+        } else {
+            backBufferGraphic2D.drawString("HP :        " + Player.instance.HP, 400, 100);
+        }
+
+        if (Player.instance.HP <= 0) {
+            backBufferGraphic2D.setColor(Color.RED);
+            backBufferGraphic2D.drawString("----- YOU LOSE -----", Settings.gameplaywidth / 2 - 50, Settings.gameplayheight / 2);
+            backBufferGraphic2D.setColor(Color.CYAN);
+            backBufferGraphic2D.drawString("Press Enter to exit",Settings.gameplaywidth / 2 - 50, Settings.gameplayheight / 2 - 50);
+            this.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_ENTER:
+                            System.exit(0);
+                    }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            });
+        }
+
 
         Graphics2D g2d = (Graphics2D) this.getGraphics();
         g2d.drawImage(backBufferImage, 0, 0, null);

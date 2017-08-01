@@ -2,10 +2,7 @@ package game.enemies;
 
 import game.Utils;
 
-import game.bases.BoxCollider;
-import game.bases.FrameCounter;
-import game.bases.GameObject;
-import game.bases.Vector2D;
+import game.bases.*;
 import game.bases.physics.PhysicsBody;
 import game.bases.renderers.ImageRenderer;
 import game.player.Player;
@@ -83,14 +80,25 @@ public class BlueEnemy extends GameObject implements PhysicsBody {
 
     public void castSpell() {
         if (!spellDissabled) {
-            Vector2D target = Player.instance.position;
-            Vector2D bulletVelocity = target.substract(position).normalize().multiply(3);
+//            if (Player.instance.isActive) {
+                Vector2D target = Player.instance.position;
+                Vector2D bulletVelocity = target.substract(position).normalize().multiply(3);
 
-            BlueEnemySpell blueEnemySpell = new BlueEnemySpell();
-            blueEnemySpell.velocity.set(bulletVelocity);
-            blueEnemySpell.position.set(this.position.add(0, 10));
-            GameObject.add(blueEnemySpell);
-            spellDissabled = true;
+                BlueEnemySpell blueEnemySpell = new BlueEnemySpell();
+                blueEnemySpell.velocity.set(bulletVelocity);
+                blueEnemySpell.position.set(this.position.add(0, 10));
+                GameObject.add(blueEnemySpell);
+                spellDissabled = true;
+//            }
+//            else {
+//
+//
+//                BlueEnemySpell blueEnemySpell = GameObjectPool.recycle(BlueEnemySpell.class);
+//                blueEnemySpell.velocity.set(0,6);
+//                blueEnemySpell.position.set(this.position.add(0, 10));
+//                GameObject.add(blueEnemySpell);
+//                spellDissabled = true;
+//            }
         }
     }
 

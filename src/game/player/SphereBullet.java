@@ -41,7 +41,22 @@ public class SphereBullet extends GameObject {
     @Override
     public void run(Vector2D parentPosition) {
         super.run(parentPosition);
-        this.velocity.set(0,-9);
+
+        GameObject enemy = Physics.findEnemy(BossEnemy.class);
+        if (enemy == null) {
+            enemy = Physics.findEnemy(PinkEnemy.class);
+            if (enemy == null) {
+                enemy = Physics.findEnemy(BlueEnemy.class);
+            }
+        }
+
+        if (enemy != null) {
+            this.target = enemy.position;
+            velocity = target.substract(this.position).normalize().multiply(7);
+        }else {
+            this.velocity = new Vector2D(0,-9);
+        }
+//
         this.position.addUp(velocity);
         changePicture();
         hitEnemy();
